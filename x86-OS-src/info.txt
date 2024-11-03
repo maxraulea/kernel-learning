@@ -1,0 +1,6 @@
+This is the first time initialising the stack so that I can use C code in my kernel.
+
+a makefile is also added to build the os more easily.
+
+
+after running it on QEMU typing info registers" we will see that eax indeed contains the output of our functions.

@@ -1,0 +1,10 @@
+this is the first time booting a newly created .iso file.
+
+On macOS I can run it on qemu using the following command:
+	qemu-system-i386 \
+    -m 32 \
+    -cdrom os.iso \
+    -boot d \
+    -monitor stdio
+
+and then by typing in "info registers" we will see that eax indeed contains CAFEBABE.
