@@ -20,7 +20,7 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
 {
 	char *fb = (char *) 0x000B8000;
 	fb[i] = c;
-	fb[i + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
+	fb[i + 1] = ((bg & 0x0F) << 4) | (fg & 0x0F);
 }
 
 /** fb_move_cursor:
@@ -38,6 +38,12 @@ void fb_move_cursor(unsigned short pos)
 
 void write_to_framebuffer(char* buf, unsigned int len)
 {	
-	buf = buf + len;
-	fb_move_cursor(500);
+	static unsigned int framebuffer_index = 0;
+	
+	for(unsigned int i = 0; i < len; i++)
+	{
+		fb_write_cell(framebuffer_index * 2, buf [i], 2, 0);
+		fb_move_cursor(framebuffer_index);
+		framebuffer_index++;
+	}
 }

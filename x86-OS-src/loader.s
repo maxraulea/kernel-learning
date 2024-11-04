@@ -13,9 +13,11 @@ align 4					;the code must be 4 bytes alligned ?
 	dd FLAGS			;
 	dd CHECKSUM			;	
 
+;this is the code that gets executed when booting, the most interesting thing that happens for now initialising the stack pointer
+
 loader:					;this is the entry point for the executable
 	mov eax, 0xCAFEBABE		;place number in register eax
-	mov esp, kernel_stack + KERNEL_STACK_SIZE   ; point esp to the start of the                                                ; stack (end of memory area)
+	mov esp, kernel_stack + KERNEL_STACK_SIZE   ; point esp to the start of the stack (end of memory area)
 	
 	
 	push dword 3            ; arg3
@@ -23,12 +25,12 @@ loader:					;this is the entry point for the executable
     	push dword 1            ; arg1
     	call sum_of_three       ; call the function, the result will be in eax
 	call kmain
-	mov word [0x000B8000], 0x2841    	
 
 .loop:
 	jmp .loop			;infinite loop
 
-
+;here we reserve the 4kb of memory used by the stack
+;resb means, reserve bytes
 section .bss
 align 4
                                      ; align at 4 bytes
