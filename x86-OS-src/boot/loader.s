@@ -19,7 +19,6 @@ loader:					;this is the entry point for the executable
 	mov eax, 0xCAFEBABE		;place number in register eax
 	mov esp, kernel_stack + KERNEL_STACK_SIZE   ; point esp to the start of the stack (end of memory area)
 	
-	
 	push dword 3            ; arg3
     	push dword 2            ; arg2
     	push dword 1            ; arg1

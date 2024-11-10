@@ -1,4 +1,4 @@
-#include "write_framebuffer.h"
+#include "../drivers/framebuffer/write_framebuffer.h"
 
 int sum_of_three(int arg1, int arg2, int arg3)
 {
@@ -15,4 +15,6 @@ void kmain(){
 		write_to_framebuffer(message3, 9);
 	}
 	write_to_framebuffer(message3, 9);
+//	for(;;){
+//	}
 }

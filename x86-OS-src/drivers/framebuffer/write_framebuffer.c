@@ -11,6 +11,17 @@
 #define FB_CHAR_HEIGHT 25
 
 #define FB_ADDR 0x000B8000
+
+
+#define outb(value, port) \
+	__asm__ ("outb %%al,%%dx"::"a" ((unsigned char)(value)),"d" ((unsigned short)(port)))
+
+#define outb2(port, value) \
+    __asm__ __volatile__ ("out %0, %1" : : "a" ((value)), "d" ((port)))
+
+static inline void outb_h(unsigned short port, unsigned char data) {
+    outb(data, port);  
+}
 /** fb_write_cell:
 
 *  Writes a character with the given foreground and background to position i
@@ -35,10 +46,10 @@ void fb_write_cell(unsigned int i, char c, unsigned char fg, unsigned char bg)
 */
 void fb_move_cursor(unsigned short pos)
 {
-	outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
-	outb(FB_DATA_PORT,    ((pos >> 8) & 0x00FF));
-	outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
-	outb(FB_DATA_PORT,    pos & 0x00FF);
+    outb(FB_HIGH_BYTE_COMMAND, FB_COMMAND_PORT);
+    outb((pos >> 8) & 0x00FF, FB_DATA_PORT);
+    outb(FB_LOW_BYTE_COMMAND, FB_COMMAND_PORT);
+    outb(pos & 0x00FF, FB_DATA_PORT);
 }
 
 /* TODO can be optimized for using int* instead if char* */
