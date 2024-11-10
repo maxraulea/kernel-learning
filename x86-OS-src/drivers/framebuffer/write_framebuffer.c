@@ -1,4 +1,3 @@
-#include "write_framebuffer.h"
 #include <asm/io.h>
 /* The I/O ports */
 #define FB_COMMAND_PORT         0x3D4

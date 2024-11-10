@@ -8,7 +8,6 @@ KERNEL_STACK_SIZE equ 4096                  ; size of stack in bytes
 section .text:				;assembly code starts here
 align 4					;the code must be 4 bytes alligned ?
 	extern kmain
-	extern sum_of_three   ; the function sum_of_three is defined elsewhere
 	dd MAGIC_NUMBER			;defining the constants
 	dd FLAGS			;
 	dd CHECKSUM			;	
@@ -22,7 +21,6 @@ loader:					;this is the entry point for the executable
 	push dword 3            ; arg3
     	push dword 2            ; arg2
     	push dword 1            ; arg1
-    	call sum_of_three       ; call the function, the result will be in eax
 	call kmain
 
 .loop:

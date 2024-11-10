@@ -1,11 +1,19 @@
 #include <maxos/write_framebuffer.h>
+#include <maxos/write_serial.h>
+#include <stdarg.h>
 
-int sum_of_three(int arg1, int arg2, int arg3)
+void init_serial_port(void)
 {
-	return arg1 + arg2 + arg3;
+	serial_configure_baud_rate(3);
+	serial_configure_line();
 }
 
-void kmain(){
+void kmain()
+{
+	init_serial_port();
+	char hallo[] = "hallo";
+	write_buffer_to_serial(hallo, 5);
+	
 	char message[] = "ik ben max";
 	char message2[] = "\nlet's test what happens";
 	char message3[] = "\n jo boys";
@@ -15,6 +23,4 @@ void kmain(){
 		write_to_framebuffer(message3, 9);
 	}
 	write_to_framebuffer(message3, 9);
-//	for(;;){
-//	}
 }

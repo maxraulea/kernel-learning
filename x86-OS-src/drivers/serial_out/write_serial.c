@@ -31,11 +31,11 @@
 *  @param com      The COM port to configure
 *  @param divisor  The divisor
 */
-void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
+void serial_configure_baud_rate(unsigned short divisor)
 {
-	outb(SERIAL_LINE_ENABLE_DLAB, SERIAL_LINE_COMMAND_PORT(com));
-	outb((divisor >> 8) & 0x00FF, SERIAL_DATA_PORT(com));
-	outb(divisor & 0x00FF, SERIAL_DATA_PORT(com));
+	outb(SERIAL_LINE_ENABLE_DLAB, SERIAL_LINE_COMMAND_PORT(SERIAL_COM1_BASE));
+	outb((divisor >> 8) & 0x00FF, SERIAL_DATA_PORT(SERIAL_COM1_BASE));
+	outb(divisor & 0x00FF, SERIAL_DATA_PORT(SERIAL_COM1_BASE));
 }
 
 /** serial_configure_line:
@@ -45,16 +45,16 @@ void serial_configure_baud_rate(unsigned short com, unsigned short divisor)
 *
 *  @param com  The serial port to configure
 */
-void serial_configure_line(unsigned short com)
+void serial_configure_line(void)
 {
 	/* Bit:     | 7 | 6 | 5 4 3 | 2 | 1 0 |
 	 * Content: | d | b | prty  | s | dl  |
 	 * Value:   | 0 | 0 | 0 0 0 | 0 | 1 1 | = 0x03
 	 */
-	outb(0x03, SERIAL_LINE_COMMAND_PORT(com));
+	outb(0x03, SERIAL_LINE_COMMAND_PORT(SERIAL_COM1_BASE));
 }
 
-/** serial_is_transmit_fifo_empty:
+/** is_transmit_empty:
 *  Checks whether the transmit FIFO queue is empty or not for the given COM
 *  port.
 *
@@ -62,8 +62,28 @@ void serial_configure_line(unsigned short com)
 *  @return 0 if the transmit FIFO queue is not empty
 *          1 if the transmit FIFO queue is empty
 */
-int serial_is_transmit_fifo_empty(unsigned int com)
+static int is_transmit_empty(void)
 {
 	/* 0x20 = 0010 0000 */
-	return inb(SERIAL_LINE_STATUS_PORT(com)) & 0x20;
+	return inb(SERIAL_LINE_STATUS_PORT(SERIAL_COM1_BASE)) & 0x20;
 }
+
+/*
+ *
+ */
+static void write_serial(char a) 
+{
+   while (is_transmit_empty() == 0);
+   outb(a, SERIAL_DATA_PORT(SERIAL_COM1_BASE));
+}
+
+/* this function writes a given buffer to the serial output
+ *
+ */
+void write_buffer_to_serial(const char* buf, unsigned int len)
+{
+	for(unsigned int i = 0; i < len; i++){
+		write_serial(buf[i]);
+	}
+}
+

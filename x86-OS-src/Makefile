@@ -36,15 +36,16 @@ run: os.iso
     		-m 32 \
     		-cdrom os.iso \
     		-boot d \
-    		-monitor stdio        
+    		-monitor stdio \
+		-serial file:serial.log
 
 run-mac: 
 	qemu-system-i386 \
     		-m 32 \
     		-cdrom os.iso \
     		-boot d \
-    		-monitor stdio        
-
+    		-monitor stdio \
+		-serial file:serial.log
 %.o: %.c
 	$(CC) $(CFLAGS)  $< -o $@
 
