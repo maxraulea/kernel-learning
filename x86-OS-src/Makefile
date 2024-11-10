@@ -1,7 +1,7 @@
 OBJECTS = loader.o io.o kmain.o write_framebuffer.o
 CC = gcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-             -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+             -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -Iinclude -c
 MAKE = make
 
 LDFLAGS = -T link.ld -melf_i386
@@ -11,7 +11,7 @@ ASFLAGS = -f elf
 DRIVERS = 0
 LIBS = lib/lib.a
 DRIVER_ARCHIVE = drivers/drivers.a
-OBJECTS  = boot/loader.o io.o init/kmain.o 
+OBJECTS  = boot/loader.o  init/kmain.o 
 
 all: kernel.elf
 
@@ -51,10 +51,10 @@ run-mac:
 %.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
 lib:
-	$(MAKE) -C lib CC="$(CC)" CFLAGS="$(CFLAGS)" AR="$(AR)" clean all
+	$(MAKE) -C lib 
 
 drivers:
-	$(MAKE) -C drivers CC="$(CC)" CFLAGS="$(CFLAGS)" clean all
+	$(MAKE) -C drivers
 
 clean:
 	rm -rf *.o kernel.elf os.iso

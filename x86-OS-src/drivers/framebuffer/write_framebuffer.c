@@ -1,4 +1,5 @@
 #include "write_framebuffer.h"
+#include <asm/io.h>
 /* The I/O ports */
 #define FB_COMMAND_PORT         0x3D4
 #define FB_DATA_PORT            0x3D5
@@ -13,15 +14,7 @@
 #define FB_ADDR 0x000B8000
 
 
-#define outb(value, port) \
-	__asm__ ("outb %%al,%%dx"::"a" ((unsigned char)(value)),"d" ((unsigned short)(port)))
 
-#define outb2(port, value) \
-    __asm__ __volatile__ ("out %0, %1" : : "a" ((value)), "d" ((port)))
-
-static inline void outb_h(unsigned short port, unsigned char data) {
-    outb(data, port);  
-}
 /** fb_write_cell:
 
 *  Writes a character with the given foreground and background to position i

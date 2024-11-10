@@ -1,5 +1,7 @@
 LIB_OBJS = string.o 
 
+CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
+             -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -Iinclude -c
 all: lib.a
 
 lib.a: $(LIB_OBJS)
